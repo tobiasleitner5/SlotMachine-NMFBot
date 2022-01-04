@@ -1,4 +1,4 @@
-package Main;
+package connectivity;
 
 import com.fasterxml.jackson.core.util.DefaultPrettyPrinter;
 import com.fasterxml.jackson.databind.ObjectMapper;
