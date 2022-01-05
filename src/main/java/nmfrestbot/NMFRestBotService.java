@@ -3,6 +3,7 @@ package nmfrestbot;
 import at.jku.dke.slotmachine.controller.service.dto.SolutionListDTO;
 import at.jku.dke.slotmachine.nmf.service.dto.AcceptedFlightListDTO;
 import at.jku.dke.slotmachine.nmf.service.dto.EnvelopeDTO;
+import connectivity.TestDataGeneratorConnector;
 import io.swagger.v3.oas.annotations.Operation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,7 +11,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-import testdatagenerator.TestDataGenerator;
 
 import java.io.IOException;
 
@@ -18,9 +18,8 @@ import java.io.IOException;
 public class NMFRestBotService {
     private static final Logger LOGGER = LoggerFactory.getLogger(NMFRestBotService.class);
     private static final ControllerClient controllerClient = new ControllerClient();
-    private static final TestDataGenerator testDataGenerator = new TestDataGenerator();
 
-    @PostMapping(value = "flightProposals", consumes = "application/json") //SolutionListDTO
+    @PostMapping(value = "/api/flight_proposals", consumes = "application/json") //SolutionListDTO
     @Operation(
             description = "Returns a solution."
     )
@@ -40,11 +39,11 @@ public class NMFRestBotService {
         }
     }
 
-    @GetMapping(value = "flightListByAerodrome", produces = "application/xml")
+    @GetMapping(value = "/api/FlightListByAerodrome", produces = "application/xml")
     @Operation(
             description = "Returns a solution."
     )
     public EnvelopeDTO getFlightList(){
-        return testDataGenerator.generateEnvelopeDTO();
+        return TestDataGeneratorConnector.generateEnvelopeDTO();
     }
 }

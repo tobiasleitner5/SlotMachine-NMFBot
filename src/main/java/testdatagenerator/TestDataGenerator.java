@@ -1,14 +1,11 @@
 package testdatagenerator;
 
 import at.jku.dke.slotmachine.nmf.service.dto.*;
-import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import com.mifmif.common.regex.Generex;
 import connectivity.JsonInput;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.File;
-import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
@@ -17,6 +14,8 @@ import java.util.List;
 import java.util.Random;
 
 public class TestDataGenerator {
+
+    private TestDataGenerator(){super();}
 
     private static final Logger LOGGER = LoggerFactory.getLogger(TestDataGenerator.class);
     private static final Random random = new Random();
@@ -30,7 +29,6 @@ public class TestDataGenerator {
         BodyDTO bodyDTO = new BodyDTO();
         FlightListByAerodromeReplyDTO flightListByAerodromeReplyDTO = new FlightListByAerodromeReplyDTO();
         DataDTO dataDTO = new DataDTO();
-        List<FlightsDTO> flightsDTOList;
 
         //global settings
         String aerodomeOfRegulation = testDataConfigGlobal.getAerodomeOfRegulation();
@@ -46,17 +44,20 @@ public class TestDataGenerator {
         String timeWindowString = testDataConfigGlobal.getTimeWindowString();
 
         //RequestReceptionTime
-        LocalDateTimeToMinOrSecDTO localDateTimeToMinOrSecDTO = new LocalDateTimeToMinOrSecDTO();
-        localDateTimeToMinOrSecDTO.setText(LocalDateTime.now());
+        DateTimeFormatter formatterWithSeconds = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        LocalDateTimeToMinOrSecDTO now = new LocalDateTimeToMinOrSecDTO();
+        LocalDateTime nowDate = LocalDateTime.now();
+        String nowDateString = (nowDate.format(formatterWithSeconds));
+        now.setText(LocalDateTime.parse(nowDateString, formatterWithSeconds));
 
         //requestID
         Generex requestId = new Generex("[A-Z][0-9][A-Z]_[A-Z]{3}:[0-9]{8}");
         String requestIdString = requestId.random();
 
-        flightListByAerodromeReplyDTO.setRequestReceptionTime(localDateTimeToMinOrSecDTO);
+        flightListByAerodromeReplyDTO.setRequestReceptionTime(now);
         flightListByAerodromeReplyDTO.setRequestId(requestIdString);
-        flightListByAerodromeReplyDTO.setSendTime(localDateTimeToMinOrSecDTO);
-        flightListByAerodromeReplyDTO.setStatus(testDataConfigGlobal.getStatus());
+        flightListByAerodromeReplyDTO.setSendTime(now);
+        flightListByAerodromeReplyDTO.setStatus(status);
 
         //dataDTO
         //
@@ -78,9 +79,9 @@ public class TestDataGenerator {
         //RandomDate
         String [] s = timeWindowString.split("->");
 
-        DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-        LocalDateTime start = LocalDateTime.parse(s[0], timeFormatter);
-        LocalDateTime end = LocalDateTime.parse(s[1], timeFormatter);
+        DateTimeFormatter formatterWithoutSeconds = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        LocalDateTime start = LocalDateTime.parse(s[0], formatterWithoutSeconds);
+        LocalDateTime end = LocalDateTime.parse(s[1], formatterWithoutSeconds);
 
         //generate list of times
         List<LocalDateTime> l = TestDataGeneratorTimes.generateTimeList(start, end);
@@ -101,9 +102,10 @@ public class TestDataGenerator {
                 KeysDTO keysDTO = new KeysDTO();
                 LocalDateTime calculatedTakeoffTime = TestDataGeneratorTimes.pickRandomDate(l);
                 LocalDateTimeToMinOrSecDTO calculatedTakeoffTimeNew = new LocalDateTimeToMinOrSecDTO();
-                calculatedTakeoffTimeNew.setText(calculatedTakeoffTime);
+                String calculatedTakeoffTimeString = (calculatedTakeoffTime.format(formatterWithoutSeconds));
+                calculatedTakeoffTimeNew.setText(LocalDateTime.parse(calculatedTakeoffTimeString, formatterWithoutSeconds));
                 LocalDateTimeToMinOrSecDTO arrivalTime = new LocalDateTimeToMinOrSecDTO();
-                arrivalTime.setText(calculatedTakeoffTime.plus(random.nextInt(300), ChronoUnit.MINUTES));
+                arrivalTime.setText(LocalDateTime.parse(calculatedTakeoffTimeString, formatterWithoutSeconds).plus(random.nextInt(300), ChronoUnit.MINUTES));
 
                 //keys
                 keysDTO.setAircraftId(aircraftId.random());
@@ -113,7 +115,7 @@ public class TestDataGenerator {
                 keysDTO.setNonICAOAerodromeOfDestination(nonICAOAerodromeOfDestination);
                 keysDTO.setAirFiled(airfiled);
                 LocalDateTimeToMinOrSecDTO estimatedOffBlockTime = new LocalDateTimeToMinOrSecDTO();
-                estimatedOffBlockTime.setText(calculatedTakeoffTime.plus(20, ChronoUnit.MINUTES));
+                estimatedOffBlockTime.setText(LocalDateTime.parse(calculatedTakeoffTimeString, formatterWithoutSeconds).minus(20, ChronoUnit.MINUTES));
                 keysDTO.setEstimatedOffBlockTime(estimatedOffBlockTime);
 
                 //flightIdDTO
@@ -141,6 +143,8 @@ public class TestDataGenerator {
                 //flights
                 flightsDTO.setFlight(flightDTO);
                 flights.add(flightsDTO);
+
+                flightId++;
             }
         }
         dataDTO.setFlights(flights);
@@ -153,21 +157,8 @@ public class TestDataGenerator {
         bodyDTO.setFlightListByAerodromeReply(flightListByAerodromeReplyDTO);
         envelopeDTO.setBody(bodyDTO);
 
-        try {
-            toxml(envelopeDTO);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        System.out.println(envelopeDTO);
-
+        LOGGER.info("EnvelopeDTO created sucessfully.");
         return envelopeDTO;
-    }
-
-    public static void toxml(EnvelopeDTO input) throws IOException {
-        XmlMapper xmlMapper = new XmlMapper();
-        xmlMapper.findAndRegisterModules();
-        xmlMapper.writeValue(new File("simple_bean.xml"), input);
-        File file = new File("simple_bean.xml");
     }
 
     /*private static void checkInput(int numberOfFlights, int numberOfSlots, String timeWindowString) throws IOException {

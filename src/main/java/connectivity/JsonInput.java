@@ -5,12 +5,8 @@ import com.fasterxml.jackson.databind.json.JsonMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import testdatagenerator.TestDataConfigDTO;
-import testdatagenerator.TestDataConfigElement;
-
 import java.io.File;
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.List;
 
 public class JsonInput {
     private static final Logger LOGGER = LoggerFactory.getLogger(JsonInput.class);

@@ -1,8 +1,5 @@
 package nmfrestbot;
 
-import at.jku.dke.slotmachine.controller.service.dto.FlightListDTO;
-import at.jku.dke.slotmachine.controller.service.dto.RegulationRegistrationDTO;
-import at.jku.dke.slotmachine.controller.service.dto.WeightMapDTO;
 import at.jku.dke.slotmachine.nmf.service.dto.AcceptedFlightListDTO;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -15,7 +12,6 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
-import java.util.List;
 
 
 public class ControllerClient {
@@ -40,10 +36,7 @@ public class ControllerClient {
             URLConnection connection = url.openConnection();
             InputStream inputStream = connection.getInputStream();
             String text = new String(inputStream.readAllBytes(), StandardCharsets.UTF_8);
-            if(text.equals("Controller is active."))
-                return true;
-            else
-                return false;
+            return text.equals("Controller is active.");
         } catch (Exception e) {
             return false;
         }
