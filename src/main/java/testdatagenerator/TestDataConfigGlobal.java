@@ -2,6 +2,7 @@ package testdatagenerator;
 
 public class TestDataConfigGlobal {
     private String aerodomeOfRegulation;
+    private String mostPenalisingRegulation;
     private String mostPenalisingRegulationCauseReason;
     private String filledRegistrationMark;
     private int slotSwapCounterCurrent;
@@ -101,10 +102,31 @@ public class TestDataConfigGlobal {
         this.airfiled = airfiled;
     }
 
+    public String getMostPenalisingRegulation() {
+        return mostPenalisingRegulation;
+    }
+
+    public void setMostPenalisingRegulation(String mostPenalisingRegulation) {
+        this.mostPenalisingRegulation = mostPenalisingRegulation;
+    }
+
+    public boolean isNonICAOAerodromeOfDestination() {
+        return nonICAOAerodromeOfDestination;
+    }
+
+    public boolean isNonICAOAerodromeOfDeparture() {
+        return nonICAOAerodromeOfDeparture;
+    }
+
+    public boolean isAirfiled() {
+        return airfiled;
+    }
+
     @Override
     public String toString() {
         return "TestDataConfigGlobal{" +
                 "aerodomeOfRegulation='" + aerodomeOfRegulation + '\'' +
+                ", mostPenalisingRegulation='" + mostPenalisingRegulation + '\'' +
                 ", mostPenalisingRegulationCauseReason='" + mostPenalisingRegulationCauseReason + '\'' +
                 ", filledRegistrationMark='" + filledRegistrationMark + '\'' +
                 ", slotSwapCounterCurrent=" + slotSwapCounterCurrent +
@@ -114,6 +136,7 @@ public class TestDataConfigGlobal {
                 ", nonICAOAerodromeOfDestination=" + nonICAOAerodromeOfDestination +
                 ", nonICAOAerodromeOfDeparture=" + nonICAOAerodromeOfDeparture +
                 ", airfiled=" + airfiled +
+                ", timeWindowString='" + timeWindowString + '\'' +
                 '}';
     }
 }

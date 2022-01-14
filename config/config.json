@@ -1,5 +1,6 @@
 {
   "testDataConfigGlobal": {
+    "mostPenalisingRegulation": "REGULATION1",
     "aerodomeOfRegulation": "LSZH",
     "mostPenalisingRegulationCauseReason": "AERODOME_CAPACITY",
     "mostPenalisingRegulationLocationCategory": "DEPARTURE",
@@ -16,7 +17,7 @@
   [
     {
       "numberOfFlights": 10,
-      "airline": "AIRLINE1"
+      "airline": "SWR"
     },
     {
       "numberOfFlights": 20,

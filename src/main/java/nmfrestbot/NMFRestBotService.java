@@ -18,6 +18,7 @@ import java.io.IOException;
 public class NMFRestBotService {
     private static final Logger LOGGER = LoggerFactory.getLogger(NMFRestBotService.class);
     private static final ControllerClient controllerClient = new ControllerClient();
+    private static EnvelopeDTO flightList = TestDataGeneratorConnector.generateEnvelopeDTO();
 
     @PostMapping(value = "/api/flight_proposals", consumes = "application/json") //SolutionListDTO
     @Operation(
@@ -25,11 +26,12 @@ public class NMFRestBotService {
     )
     public void getSolutionList(@RequestBody SolutionListDTO solutionListDTO){
         LOGGER.info(String.format("%s received.", solutionListDTO));
-        String optId = solutionListDTO.getSolutions().get(1).getOptimizationId();
-        String solutionId = solutionListDTO.getSolutions().get(1).getSolutionId();
+        String optId = solutionListDTO.getSolutions().get(0).getOptimizationId();
+        String solutionId = solutionListDTO.getSolutions().get(0).getSolutionId();
         AcceptedFlightListDTO acceptedFlightListDTO = new AcceptedFlightListDTO();
         acceptedFlightListDTO.setSolutionId(solutionId);
         acceptedFlightListDTO.setOptimizationId(optId);
+        flightList = TestDataGeneratorConnector.generateEnvelopeDTO();
         try {
             controllerClient.acceptSolution(acceptedFlightListDTO, optId);
         } catch (IOException e) {
@@ -44,6 +46,6 @@ public class NMFRestBotService {
             description = "Returns a solution."
     )
     public EnvelopeDTO getFlightList(){
-        return TestDataGeneratorConnector.generateEnvelopeDTO();
+        return flightList;
     }
 }

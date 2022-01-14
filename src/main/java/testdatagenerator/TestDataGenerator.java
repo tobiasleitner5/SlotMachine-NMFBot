@@ -42,6 +42,7 @@ public class TestDataGenerator {
         boolean nonICAOAerodromeOfDeparture = testDataConfigGlobal.getNonICAOAerodromeOfDeparture();
         boolean airfiled = testDataConfigGlobal.getAirfiled();
         String timeWindowString = testDataConfigGlobal.getTimeWindowString();
+        String mostPenalisingRegulation = testDataConfigGlobal.getMostPenalisingRegulation();
 
         //RequestReceptionTime
         DateTimeFormatter formatterWithSeconds = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
@@ -135,7 +136,7 @@ public class TestDataGenerator {
                 flightDTO.setEstimatedTimeOfArrival(arrivalTime);
                 flightDTO.setAircraftOperator(element.getAirline());
                 flightDTO.setOperatingAircraftOperator(element.getAirline());
-                flightDTO.setMostPenalisingRegulation("REGULATION1");
+                flightDTO.setMostPenalisingRegulation(mostPenalisingRegulation);
                 flightDTO.setMostPenalisingRegulationCause(mostPenalisingRegulationCauseDTO);
                 flightDTO.setFiledRegistrationMark(filledRegistrationMark);
                 flightDTO.setSlotSwapCounter(slotSwapCounterDTO);
