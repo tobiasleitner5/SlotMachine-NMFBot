@@ -33,7 +33,7 @@ public class TestDataGenerator {
         //global settings
         String aerodomeOfRegulation = testDataConfigGlobal.getAerodomeOfRegulation();
         String mostPenalisingRegulationCauseReason = testDataConfigGlobal.getMostPenalisingRegulationCauseReason();
-        String filledRegistrationMark = testDataConfigGlobal.getFilledRegistrationMark();
+        String filledRegistrationMark = testDataConfigGlobal.getFiledRegistrationMark();
         int slotSwapCounterCurrent = testDataConfigGlobal.getSlotSwapCounterCurrent();
         int slotSwapCounterMax = testDataConfigGlobal.getSlotSwapCounterMax();
         String mostPenalisingRegulationLocationCategory = testDataConfigGlobal.getMostPenalisingRegulationLocationCategory();

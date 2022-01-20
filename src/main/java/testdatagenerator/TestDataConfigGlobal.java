@@ -4,7 +4,7 @@ public class TestDataConfigGlobal {
     private String aerodomeOfRegulation;
     private String mostPenalisingRegulation;
     private String mostPenalisingRegulationCauseReason;
-    private String filledRegistrationMark;
+    private String filedRegistrationMark;
     private int slotSwapCounterCurrent;
     private int slotSwapCounterMax;
     private String mostPenalisingRegulationLocationCategory;
@@ -46,12 +46,12 @@ public class TestDataConfigGlobal {
         this.mostPenalisingRegulationCauseReason = mostPenalisingRegulationCauseReason;
     }
 
-    public String getFilledRegistrationMark() {
-        return filledRegistrationMark;
+    public String getFiledRegistrationMark() {
+        return filedRegistrationMark;
     }
 
-    public void setFilledRegistrationMark(String filledRegistrationMark) {
-        this.filledRegistrationMark = filledRegistrationMark;
+    public void setFiledRegistrationMark(String filedRegistrationMark) {
+        this.filedRegistrationMark = filedRegistrationMark;
     }
 
     public int getSlotSwapCounterCurrent() {
@@ -128,7 +128,7 @@ public class TestDataConfigGlobal {
                 "aerodomeOfRegulation='" + aerodomeOfRegulation + '\'' +
                 ", mostPenalisingRegulation='" + mostPenalisingRegulation + '\'' +
                 ", mostPenalisingRegulationCauseReason='" + mostPenalisingRegulationCauseReason + '\'' +
-                ", filledRegistrationMark='" + filledRegistrationMark + '\'' +
+                ", filedRegistrationMark='" + filedRegistrationMark + '\'' +
                 ", slotSwapCounterCurrent=" + slotSwapCounterCurrent +
                 ", slotSwapCounterMax=" + slotSwapCounterMax +
                 ", mostPenalisingRegulationLocationCategory='" + mostPenalisingRegulationLocationCategory + '\'' +

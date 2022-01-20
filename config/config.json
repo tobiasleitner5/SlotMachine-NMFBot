@@ -4,7 +4,7 @@
     "aerodomeOfRegulation": "LSZH",
     "mostPenalisingRegulationCauseReason": "AERODOME_CAPACITY",
     "mostPenalisingRegulationLocationCategory": "DEPARTURE",
-    "filledRegistrationMark": "ADDF",
+    "filedRegistrationMark": "ADDF",
     "slotSwapCounterCurrent": 0,
     "slotSwapCounterMax": 3,
     "status": "OK",
@@ -21,7 +21,7 @@
     },
     {
       "numberOfFlights": 20,
-      "airline": "AIRLINE2"
+      "airline": "SXK"
     }
   ]
 }
