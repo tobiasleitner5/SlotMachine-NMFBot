@@ -20,7 +20,7 @@ public class NMFRestBotService {
     private static final ControllerClient controllerClient = new ControllerClient();
     private static EnvelopeDTO flightList = TestDataGeneratorConnector.generateEnvelopeDTO();
 
-    @PostMapping(value = "/api/flight_proposals", consumes = "application/json") //SolutionListDTO
+    @PostMapping(value = "api/flight_proposals", consumes = "application/json") //SolutionListDTO
     @Operation(
             description = "Returns a solution."
     )
@@ -34,6 +34,7 @@ public class NMFRestBotService {
         flightList = TestDataGeneratorConnector.generateEnvelopeDTO();
         try {
             controllerClient.acceptSolution(acceptedFlightListDTO, optId);
+            LOGGER.info("Solution accepted.");
         } catch (IOException e) {
             e.printStackTrace();
         } catch (InterruptedException e) {

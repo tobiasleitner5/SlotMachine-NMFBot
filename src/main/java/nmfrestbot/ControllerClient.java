@@ -22,8 +22,9 @@ public class ControllerClient {
     public String acceptSolution(AcceptedFlightListDTO acceptedFlightListDTO, String optId) throws IOException, InterruptedException {
         objectMapper.findAndRegisterModules();
         final String body = objectMapper.writeValueAsString(acceptedFlightListDTO);
-        HttpRequest request = HttpRequest.newBuilder().uri(URI.create(controller + "optimizations/" + optId + "/solutions/accept"))
-                .header("Content-Type", "application/json")
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(controller + "/optimizations/"+optId+"/solutions/accept"))
+                //.header("Content-Type", "application/json")
                 .POST(HttpRequest.BodyPublishers.ofString(body)).build();
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
         return (response.body());
