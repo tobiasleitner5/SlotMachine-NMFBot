@@ -24,7 +24,7 @@ public class ControllerClient {
         final String body = objectMapper.writeValueAsString(acceptedFlightListDTO);
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(controller + "/optimizations/"+optId+"/solutions/accept"))
-                //.header("Content-Type", "application/json")
+                .header("Content-Type", "application/json")
                 .POST(HttpRequest.BodyPublishers.ofString(body)).build();
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
         return (response.body());

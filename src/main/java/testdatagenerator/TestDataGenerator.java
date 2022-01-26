@@ -22,7 +22,7 @@ public class TestDataGenerator {
 
     public static EnvelopeDTO generateEnvelopeDTO(){
 
-        TestDataConfigDTO testDataConfigDTO = JsonInput.readConfig("config/config.json");
+        TestDataConfigDTO testDataConfigDTO = JsonInput.readConfig(System.getProperty("config"));
         List<TestDataConfigElement> testDataConfigElements = testDataConfigDTO.getTestDataConfigElements();
         TestDataConfigGlobal testDataConfigGlobal = testDataConfigDTO.getTestDataConfigGlobal();
         EnvelopeDTO envelopeDTO = new EnvelopeDTO();
