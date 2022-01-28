@@ -61,8 +61,6 @@ public class TestDataGenerator {
         flightListByAerodromeReplyDTO.setStatus(status);
 
         //dataDTO
-        //
-
         Generex randomAerodrome = new Generex("[A-Z]{4}");
         String aerodromeOfDeparture = null;
         String aerodromeOfArrival = null;

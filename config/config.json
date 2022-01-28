@@ -16,11 +16,11 @@
   "testDataConfigElements":
   [
     {
-      "numberOfFlights": 10,
+      "numberOfFlights": 7,
       "airline": "SWR"
     },
     {
-      "numberOfFlights": 10,
+      "numberOfFlights": 3,
       "airline": "SXK"
     }
   ]
