@@ -27,7 +27,7 @@ public class NMFRestBotService {
             description = "Returns a solution."
     )
     public ResponseEntity<String> getSolutionList(@RequestBody SolutionListDTO solutionListDTO){
-        LOGGER.info(String.format("%s received.", solutionListDTO));
+        LOGGER.info(String.format("Received SolutionNotification: %s.", solutionListDTO));
         String optId = solutionListDTO.getSolutions().get(0).getOptimizationId();
         String solutionId = solutionListDTO.getSolutions().get(0).getSolutionId();
         if(solutionId == null || optId == null){

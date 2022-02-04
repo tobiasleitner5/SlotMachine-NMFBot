@@ -6,6 +6,7 @@ import connectivity.JsonInput;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
@@ -20,9 +21,14 @@ public class TestDataGenerator {
     private static final Logger LOGGER = LoggerFactory.getLogger(TestDataGenerator.class);
     private static final Random random = new Random();
 
-    public static EnvelopeDTO generateEnvelopeDTO(){
+    public static EnvelopeDTO generateEnvelopeDTO() throws IOException{
 
         TestDataConfigDTO testDataConfigDTO = JsonInput.readConfig(System.getProperty("config"));
+
+        if(!checkInput(testDataConfigDTO)){
+            throw new IOException("Config file is not valid.");
+        }
+
         List<TestDataConfigElement> testDataConfigElements = testDataConfigDTO.getTestDataConfigElements();
         TestDataConfigGlobal testDataConfigGlobal = testDataConfigDTO.getTestDataConfigGlobal();
         EnvelopeDTO envelopeDTO = new EnvelopeDTO();
@@ -67,12 +73,9 @@ public class TestDataGenerator {
         if(testDataConfigGlobal.getMostPenalisingRegulationLocationCategory().equals("DEPARTURE")){
             aerodromeOfDeparture = aerodomeOfRegulation;
             aerodromeOfArrival = randomAerodrome.random();
-        } else if (testDataConfigGlobal.getMostPenalisingRegulationLocationCategory().equals("ARRIVAL")){
+        } if (testDataConfigGlobal.getMostPenalisingRegulationLocationCategory().equals("ARRIVAL")){
             aerodromeOfArrival = aerodomeOfRegulation;
             aerodromeOfDeparture = randomAerodrome.random();
-        }
-        else{
-            LOGGER.error("Error with Location Category!");
         }
 
         //RandomDate
@@ -160,12 +163,13 @@ public class TestDataGenerator {
         return envelopeDTO;
     }
 
-    /*private static void checkInput(int numberOfFlights, int numberOfSlots, String timeWindowString) throws IOException {
-        if((numberOfFlights >= 10) && (numberOfSlots >= 10) && numberOfSlots >= numberOfFlights && timeWindowString.matches("[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}->[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}")){
-            LOGGER.info("Input is OK.");
+    private static boolean checkInput(TestDataConfigDTO testDataConfigDTO) {
+        if(!testDataConfigDTO.getTestDataConfigGlobal().getMostPenalisingRegulationLocationCategory().equals("ARRIVAL") || !testDataConfigDTO.getTestDataConfigGlobal().getMostPenalisingRegulationLocationCategory().equals("DEPARTURE")){
+            return false;
         }
-        else{
-            throw new IOException("Input is not valid.");
+        if(!testDataConfigDTO.getTestDataConfigGlobal().getTimeWindowString().matches("[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}->[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}")){
+            return false;
         }
-    }*/
+        return true;
+    }
 }
