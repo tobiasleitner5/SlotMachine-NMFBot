@@ -164,7 +164,7 @@ public class TestDataGenerator {
     }
 
     private static boolean checkInput(TestDataConfigDTO testDataConfigDTO) {
-        if(!testDataConfigDTO.getTestDataConfigGlobal().getMostPenalisingRegulationLocationCategory().equals("ARRIVAL") || !testDataConfigDTO.getTestDataConfigGlobal().getMostPenalisingRegulationLocationCategory().equals("DEPARTURE")){
+        if(!testDataConfigDTO.getTestDataConfigGlobal().getMostPenalisingRegulationLocationCategory().equals("ARRIVAL") && !testDataConfigDTO.getTestDataConfigGlobal().getMostPenalisingRegulationLocationCategory().equals("DEPARTURE")){
             return false;
         }
         if(!testDataConfigDTO.getTestDataConfigGlobal().getTimeWindowString().matches("[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}->[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}")){
