@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,10 +21,9 @@ public class TestDataGenerator {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(TestDataGenerator.class);
     private static final Random random = new Random();
+    private static TestDataConfigDTO testDataConfigDTO = JsonInput.readConfig(System.getProperty("config"));
 
     public static EnvelopeDTO generateEnvelopeDTO() throws IOException{
-
-        TestDataConfigDTO testDataConfigDTO = JsonInput.readConfig(System.getProperty("config"));
 
         if(!checkInput(testDataConfigDTO)){
             throw new IOException("Config file is not valid.");
@@ -82,8 +82,16 @@ public class TestDataGenerator {
         String [] s = timeWindowString.split("->");
 
         DateTimeFormatter formatterWithoutSeconds = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-        LocalDateTime start = LocalDateTime.parse(s[0], formatterWithoutSeconds);
-        LocalDateTime end = LocalDateTime.parse(s[1], formatterWithoutSeconds);
+        LocalDateTime start;
+        LocalDateTime end;
+        try{
+            start = LocalDateTime.parse(s[0], formatterWithoutSeconds);
+            end = LocalDateTime.parse(s[1], formatterWithoutSeconds);
+        } catch (DateTimeParseException exception){
+            formatterWithoutSeconds = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
+            end = LocalDateTime.parse(s[1], formatterWithoutSeconds);
+            start = LocalDateTime.parse(s[0], formatterWithoutSeconds);
+        }
 
         //generate list of times
         List<LocalDateTime> l = TestDataGeneratorTimes.generateTimeList(start, end);
@@ -164,12 +172,35 @@ public class TestDataGenerator {
     }
 
     private static boolean checkInput(TestDataConfigDTO testDataConfigDTO) {
+        String [] s = testDataConfigDTO.getTestDataConfigGlobal().getTimeWindowString().split("->");
+        DateTimeFormatter formatterWithoutSeconds = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        LocalDateTime start;
+        LocalDateTime end;
+        try{
+            start = LocalDateTime.parse(s[0], formatterWithoutSeconds);
+            end = LocalDateTime.parse(s[1], formatterWithoutSeconds);
+        } catch (DateTimeParseException exception){
+            formatterWithoutSeconds = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
+            end = LocalDateTime.parse(s[1], formatterWithoutSeconds);
+            start = LocalDateTime.parse(s[0], formatterWithoutSeconds);
+        }
         if(!testDataConfigDTO.getTestDataConfigGlobal().getMostPenalisingRegulationLocationCategory().equals("ARRIVAL") && !testDataConfigDTO.getTestDataConfigGlobal().getMostPenalisingRegulationLocationCategory().equals("DEPARTURE")){
             return false;
         }
-        if(!testDataConfigDTO.getTestDataConfigGlobal().getTimeWindowString().matches("[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}->[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}")){
+        if(!testDataConfigDTO.getTestDataConfigGlobal().getTimeWindowString().matches("[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}->[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}") && !testDataConfigDTO.getTestDataConfigGlobal().getTimeWindowString().matches("[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}->[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}")){
+            return false;
+        }
+        if(start.isAfter(end) || end.isEqual(start)){
+            LOGGER.error("TimeWindowString is not valid.");
             return false;
         }
         return true;
+    }
+    public static TestDataConfigDTO getConfig(){
+        return testDataConfigDTO;
+    }
+    
+    public static void setConfig(TestDataConfigDTO testDataConfigDTO1){
+        testDataConfigDTO = testDataConfigDTO1;
     }
 }

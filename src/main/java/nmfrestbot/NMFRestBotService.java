@@ -13,8 +13,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import testdatagenerator.TestDataConfigDTO;
+import testdatagenerator.TestDataGenerator;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 
 @RestController
 public class NMFRestBotService {
@@ -36,6 +41,19 @@ public class NMFRestBotService {
         AcceptedFlightListDTO acceptedFlightListDTO = new AcceptedFlightListDTO();
         acceptedFlightListDTO.setSolutionId(solutionId);
         acceptedFlightListDTO.setOptimizationId(optId);
+        //set new timeWindow
+        TestDataConfigDTO configDTO = TestDataGenerator.getConfig();
+        String timeWindowString = configDTO.getTestDataConfigGlobal().getTimeWindowString();
+        String [] s = timeWindowString.split("->");
+        DateTimeFormatter formatterWithoutSeconds = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+        LocalDateTime start = LocalDateTime.parse(s[0], formatterWithoutSeconds);
+        LocalDateTime end = LocalDateTime.parse(s[1], formatterWithoutSeconds);
+        long diff = ChronoUnit.MINUTES.between(start, end);
+        start = end;
+        end = end.plus(diff, ChronoUnit.MINUTES);
+        timeWindowString = start.toString() + "->" + end.toString();
+        configDTO.getTestDataConfigGlobal().setTimeWindowString(timeWindowString);
+        TestDataGenerator.setConfig(configDTO);
         flightList = TestDataGeneratorConnector.generateEnvelopeDTO();
         if(flightList == null){
             return new ResponseEntity<String>("Problem with FlightListGenerator.", HttpStatus.INTERNAL_SERVER_ERROR);
